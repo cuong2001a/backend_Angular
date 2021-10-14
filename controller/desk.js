@@ -1,8 +1,8 @@
 import Desk from '../models/desk';
-export const create = (req,res)=>{
+export const create = (req, res) => {
     let a = new Desk(req.body);
-    a.save((err,data)=>{
-        if(err){
+    a.save((err, data) => {
+        if (err) {
             res.status(400).json({
                 errors: "Khong them duoc loai ghe"
             })
@@ -10,39 +10,37 @@ export const create = (req,res)=>{
         res.json(data)
     })
 }
-export const findOneAddress = async (req, res) => {
-    const { addressId } = req.params
-    console.log("ID: ", req.params.addressId)
-
+export const findOneDesk = async (req, res) => {
+    const { deskId } = req.params
     try {
-        const result = await LoaiVe.findById({ _id: addressId })
+        const result = await Desk.findById({ _id: deskId })
         res.json(result)
     } catch (error) {
         console.log(error)
         res.status(400).json({
-            errors: "Khong tim thay loai ve"
+            errors: "Khong tim thay ghe"
         })
     }
 
 }
-export const edit = async (req,res)=>{
-    const {deskId} = req.params
+export const edit = async (req, res) => {
+    const { deskId } = req.params
     const updates = req.body
-    const option = {new: true}
+    const option = { new: true }
     try {
-        const edit  = await Desk.findByIdAndUpdate({_id:deskId},updates,option)
+        const edit = await Desk.findByIdAndUpdate({ _id: deskId }, updates, option)
         res.send(edit)
     } catch (error) {
         console.log(error);
         res.status(400).json({
-            error:"Khong sua duoc ghe"
+            error: "Khong sua duoc ghe"
         })
     }
 }
-export const remove = async (req,res)=>{
-    const {deskId} = req.params
+export const remove = async (req, res) => {
+    const { deskId } = req.params
     try {
-        const remove = await Desk.findByIdAndRemove({_id: deskId})
+        const remove = await Desk.findByIdAndRemove({ _id: deskId })
         res.json({
             remove,
             message: "Xóa ghe thành công "
@@ -50,7 +48,34 @@ export const remove = async (req,res)=>{
     } catch (error) {
         console.log(error)
         res.status(400).json({
-            error:"Khong xoa duoc ghe"
+            error: "Khong xoa duoc ghe"
+        })
+    }
+}
+export const list = (req, res) => {
+    Desk.find({})
+        .populate("toaTau")
+        .exec((err, data) => {
+            if (err) {
+                res.status(400).json({
+                    error: "Khong tim thay dia chi"
+                })
+            }
+            res.json(data)
+        })
+}
+export const findDeskByTrainCar = async (req, res) => {
+    const trainCarId = req.query.toaTau?req.query.toaTau : ""
+    console.log(typeof(trainCarId))
+    try {
+        const result = await Desk.find({ toaTau: {trainCarId} })
+        res.json({
+            result
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            error: "Khong tim thay danh sach ghe cua toa nay"
         })
     }
 }

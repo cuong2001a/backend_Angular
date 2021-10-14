@@ -1,8 +1,9 @@
 import Train from '../models/train';
-export const create = (req,res)=>{
+export const create = (req, res) => {
     let a = new Train(req.body);
-    a.save((err,data)=>{
-        if(err){
+    a.save((err, data) => {
+        if (err) {
+            console.log(err);
             res.status(400).json({
                 errors: "Khong them duoc diem den"
             })
@@ -12,9 +13,10 @@ export const create = (req,res)=>{
 }
 export const listRelated = (req, res) => {
     Train.find({})
-        .populate("address")
-        .populate("time")
+        .populate("addressGo")
+        .populate("addressArrival")
         .populate("typeTicket")
+        .populate("typeTrip")
         .exec((err, train) => {
             if (err) {
                 res.status(400).json({
@@ -24,24 +26,24 @@ export const listRelated = (req, res) => {
             res.json(train)
         })
 }
-export const edit = async (req,res)=>{
-    const {trainId} = req.params
+export const edit = async (req, res) => {
+    const { trainId } = req.params
     const updates = req.body
-    const option = {new: true}
+    const option = { new: true }
     try {
-        const edit  = await Train.findByIdAndUpdate({_id:trainId},updates,option)
+        const edit = await Train.findByIdAndUpdate({ _id: trainId }, updates, option)
         res.send(edit)
     } catch (error) {
         console.log(error);
         res.status(400).json({
-            error:"Khong sua duoc tau"
+            error: "Khong sua duoc tau"
         })
     }
 }
-export const remove = async (req,res)=>{
-    const {trainId} = req.params
+export const remove = async (req, res) => {
+    const { trainId } = req.params
     try {
-        const remove = await Train.findByIdAndRemove({_id: trainId})
+        const remove = await Train.findByIdAndRemove({ _id: trainId })
         res.json({
             remove,
             message: "Xóa tau thành công "
@@ -49,27 +51,56 @@ export const remove = async (req,res)=>{
     } catch (error) {
         console.log(error)
         res.status(400).json({
-            error:"Khong xoa duoc tau"
+            error: "Khong xoa duoc tau"
         })
     }
 }
-export const search = async (req,res)=>{
-    // const address = req.query.address? req.query.address : ""
-    // const typeTicket = req.query.typeTicket? req.query.typeTicket: ""
-    const tgDi =req.query.tgDi? req.query.tgDi:""
+export const search = async (req, res) => {
+    const addressarrival = req.query.addressArrival ? req.query.addressArrival : ""
+    const addressgo = req.query.addressGo ? req.query.addressGo : ""
+    const typetrip= req.query.typeTrip ? req.query.typeTrip : ""
+    const tgDi = req.query.thoiGianDi ? req.query.thoiGianDi : ""
+    const tgVe = req.query.thoiGianVe ? req.query.thoiGianVe : ""
+
+    console.log(addressarrival)
     try {
-        const list = await Train.find(
-            {time:{thoiGianDi:{$gte:new Date("2021-12-09")}}})
-        .populate("address")
-        .populate("time")
-        .populate("typeTicket")
+        const list = await Train.find({
+            thoiGianDi:{ $gte: (new Date(tgDi)).toDateString()},
+            thoiGianVe:{$lte:(new Date(tgVe)).toDateString()},
+            addressArrival : addressarrival,
+            addressGo: addressgo,
+            typeTrip:typetrip
+        })
+            .populate("addressGo")
+            .populate("addressArrival")
+            .populate("typeTicket")
+            .populate("typeTrip")
         res.json({
             list
         })
     } catch (error) {
         console.log(error);
         res.status(400).json({
-            error:"Khong tim thay  tau"
+            error: "Khong tim thay  tau"
         })
     }
+
+}
+export const findOneTrain = async (req,res)=>{
+    const {trainId} =req.params
+    const result  = await Train.findById(trainId)
+    .populate("addressArrival")
+    .populate("addressGo")
+    .populate("typeTicket")
+    .populate("typeTrip")
+
+    .exec((err,data)=>{
+        if(err){
+            res.status(400).json({
+                errors:"Khong tim thay chuyen tau"
+            })
+        }
+        res.json(data)
+    })
+
 }

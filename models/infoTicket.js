@@ -4,40 +4,41 @@ const infoTicket = mongoose.Schema({
     train: {
         type: ObjectId,
         ref:"Train",
-        required: false
+        required: true
     },
     trainCar: {
         type: ObjectId,
         ref:"TrainCar",
-        required: false
+        required: true
     },
     desk:{
         type: ObjectId,
-        ref:"DeskTrain",
-        requried: false
+        ref:"Desk",
+        requried: true
     },
-    address:{
-        type: ObjectId,
-        ref: "Address",
-        required: false
+    nameUser: {
+        type: String,
+        requied: true
     },
-    time:{
-        type: ObjectId,
-        ref:"Time",
-        requried: false
+    cmnd: {
+        type: Number,
+        requied: true
     },
-    typeTicket:{
-        type: ObjectId,
-        ref:"TypeTicket",
-        required: false
+    phoneNumber: {
+        type: Number,
+        required: true,
+        maxLength: 13
     },
-    user:{
-        type: ObjectId,
-        ref:"User",
-        required: false
+    email:{
+        type: String,
+        required: true
     },
     people:{
         type: Number,
+        required: true
+    },
+    code:{
+        type: String,
         required: true
     }
 

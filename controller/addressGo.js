@@ -1,6 +1,6 @@
-import Address from '../models/address';
+import AddressGo from '../models/addressGo';
 export const create = (req,res)=>{
-    let a = new Address(req.body);
+    let a = new AddressGo(req.body);
     a.save((err,data)=>{
         if(err){
             res.status(400).json({
@@ -11,11 +11,11 @@ export const create = (req,res)=>{
     })
 }
 export const findOneAddress = async (req, res) => {
-    const { addressId } = req.params
-    console.log("ID: ", req.params.addressId)
+    const { addressGoId } = req.params
+    console.log("ID: ", req.params.addressGoId)
 
     try {
-        const result = await DiemDen.findById({ _id: addressId })
+        const result = await DiemDen.findById({ _id: addressGoId })
         res.json(result)
     } catch (error) {
         console.log(error)
@@ -26,11 +26,11 @@ export const findOneAddress = async (req, res) => {
 
 }
 export const edit = async (req,res)=>{
-    const {addressId} = req.params
+    const {addressGoId} = req.params
     const updates = req.body
     const option = {new: true}
     try {
-        const edit  = await Address.findByIdAndUpdate({_id:addressId},updates,option)
+        const edit  = await AddressGo.findByIdAndUpdate({_id:addressGoId},updates,option)
         res.send(edit)
     } catch (error) {
         console.log(error);
@@ -40,10 +40,10 @@ export const edit = async (req,res)=>{
     }
 }
 export const remove = async (req,res)=>{
-    const {addressId} = req.params
-    console.log(addressId);
+    const {addressGoId} = req.params
+    console.log(addressGoId);
     try {
-        const remove = await Address.findByIdAndRemove({_id: addressId})
+        const remove = await AddressGo.findByIdAndRemove({_id: addressGoId})
         res.json({
             remove,
             message: "Xóa địa chỉ thành công "
@@ -54,4 +54,15 @@ export const remove = async (req,res)=>{
             error:"Khong xoa duoc dia chi"
         })
     }
+}
+export const list = (req,res)=>{
+    AddressGo.find({})
+    .exec((err,data)=>{
+        if(err){
+            res.status(400).json({
+                errors: "Khong tim thay dia diem"
+            })
+        }
+        res.json(data)
+    })
 }

@@ -9,14 +9,9 @@ const Desk = mongoose.Schema({
         type: Boolean,
         required: true
     },
-    train: {
-        type: ObjectId,
-        ref: "Train",
-        required: false
-    },
     toaTau: {
         type: ObjectId,
-        ref: "ToaTau",
+        ref: "TrainCar",
         required: false
     }
 })

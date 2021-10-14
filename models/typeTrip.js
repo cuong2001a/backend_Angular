@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 
- const Address = mongoose.Schema({
+ const TypeTrip = mongoose.Schema({
      name:{
          type: String,
          requied: true
      }
  })
- module.exports = mongoose.model("Address",Address);
+ module.exports = mongoose.model("TypeTrip",TypeTrip);

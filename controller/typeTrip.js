@@ -1,6 +1,6 @@
-import TypeTicket from '../models/typeTicket';
+import TypeTrip from '../models/typeTrip';
 export const create = (req,res)=>{
-    let a = new TypeTicket(req.body);
+    let a = new TypeTrip(req.body);
     a.save((err,data)=>{
         if(err){
             res.status(400).json({
@@ -11,7 +11,7 @@ export const create = (req,res)=>{
     })
 }
 export const list = (req, res) => {
-    TypeTicket.find({})
+    TypeTrip.find({})
     .exec((err,data)=>{
         if(err){
             res.status(400).json({
@@ -22,11 +22,11 @@ export const list = (req, res) => {
     })
 }
 export const edit = async (req,res)=>{
-    const {typeTicketId} = req.params
+    const {typeTripId} = req.params
     const updates = req.body
     const option = {new: true}
     try {
-        const edit  = await TypeTicket.findByIdAndUpdate({_id:typeTicketId},updates,option)
+        const edit  = await TypeTrip.findByIdAndUpdate({_id:typeTripId},updates,option)
         res.send(edit)
     } catch (error) {
         console.log(error);
@@ -36,9 +36,9 @@ export const edit = async (req,res)=>{
     }
 }
 export const remove = async (req,res)=>{
-    const {typeTicketId} = req.params
+    const {typeTripId} = req.params
     try {
-        const remove = await TypeTicket.findByIdAndRemove({_id: typeTicketId})
+        const remove = await TypeTrip.findByIdAndRemove({_id: typeTripId})
         res.json({
             remove,
             message: "Xóa loai ve thành công "
@@ -51,12 +51,12 @@ export const remove = async (req,res)=>{
     }
 }
 export const findOne = async (req,res)=>{
-    const  {typeTicketId} = req.params
-    const result = await TypeTicket.findById({_id:typeTicketId})
+    const  {typeTripId} = req.params
+    const result = await TypeTrip.findById({_id:typeTripId})
     .exec((err,data)=>{
         if(err){
             res.status(400).json({
-                error:"Khong thim thay lai ve tau"
+                error:"Khong thim thay loai chuyen tau"
             })
         }
         res.json(data)

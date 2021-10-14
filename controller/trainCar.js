@@ -12,8 +12,8 @@ export const create = (req,res)=>{
 }
 export const list = (req, res) => {
     TrainCar.find({})
-        .populate("train")
-        .populate("typeDesk")
+    .populate({path:'train',
+    populate:{path:"addressGo",path:"addressArrival"}})
         .exec((err, data) => {
             if (err) {
                 res.status(400).json({

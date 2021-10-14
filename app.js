@@ -2,33 +2,32 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
+import moment from 'moment'
 const app = express();
 dotenv.config();
+moment().format('DD MM YYYY hh:mm:ss');
 
-const address = require("./routes/address")
+const addressGo = require("./routes/addressGo")
+const addressArrival = require("./routes/addressArrival")
 const desk = require("./routes/desk")
 const infoTicket = require('./routes/infoTicket')
-const infoUser = require('./routes/infoUser')
 const train  =require('./routes/train')
 const trainCar = require('./routes/trainCar')
 const typeTicket = require("./routes/typeTicket")
-const time = require('./routes/time')
-const typeDesk = require("./routes/typeDesk")
+const typeTrip = require("./routes/typeTrip")
 
 
 
 app.use(express.json())
 app.use(cors({ credentials: "same origin" }));
-
-app.use('/api',address);
+app.use('/api',addressArrival)
+app.use('/api',addressGo);
 app.use('/api',typeTicket);
-app.use('/api',time);
 app.use('/api',desk);
 app.use('/api',infoTicket);
-app.use('/api',infoUser);
 app.use('/api',train);
 app.use('/api',trainCar);
-app.use('/api',typeDesk);
+app.use('/api',typeTrip);
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

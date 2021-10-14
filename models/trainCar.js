@@ -9,11 +9,6 @@ const TrainCar = mongoose.Schema({
         type: ObjectId,
         ref:"Train",
         required: false
-    },
-    typeDesk:{
-        type: ObjectId,
-        ref:"TypeDesk",
-        required: false
     }
 })
 module.exports = mongoose.model("TrainCar", TrainCar)
